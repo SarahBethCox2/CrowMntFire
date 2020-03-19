@@ -3,6 +3,84 @@
 {%block styles%}
 <link rel="stylesheet" href="{%static 'css/volunteer.css'%}">
 {%endblock%}
+
 {% block content %}
-<h1>Volunteer page content </h1>
+ 
+        {% if status == 202 %}
+      <div class="modal " id="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thank you</h5>
+        <button type="button" id="close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Your form has been sucessfully submitted and a confirmation email was sent to <b>{{email}}<b> </p>
+        <p></p>
+      </div>
+      
+    </div>
+  </div>
+</div>
+        {% endif %}
+
+<div class="container">
+    <div class="row ">
+        <div class="col mobile">
+            <img src="../../../static/images/overlappedimg.png"  alt="">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h2>Become a Volunteer </h2>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+        </div>
+    </div>
+    <div class="row btnsRow">
+        <div class="col-md-4">
+            <img src="../../../static/images/volunteersss-1.png" width="300" height="300" alt="">
+        </div>
+        <div class="col-md-4" id="mainBtns">
+            <p><a href="/volunteer/form" role="button" class="btn btn-danger">Volunteer Form</a></p>
+             <p>OR</p>
+            <p>Update existing Volunteer Request</p>
+            <form method="POST" action="/volunteer/">
+                {% csrf_token %}
+                
+                <input type="hidden" name="came_from" value="volunteerIDForm">
+                <input type="text" placeholder="Volunteer ID"  class="form-control mx-small-2" name="volunteerID">
+                
+                {% if errormsg != ""%}
+                 <div class="alert " role="alert">
+                {{errormsg}}
+                </div>
+               {% endif %}
+
+                <button  type="submit" class="btn btn-danger ">Update Form</a>
+            </form>
+
+        </div>
+        <div class="col-md-4">
+            <img src="../../../static/images/volunteersss.png" width="300" height="300"  alt="">
+        </div>
+    </div>
+</div>
+
+  <script>
+  {% comment %} WILL MOVE THIS LATER {% endcomment %}
+    const button = document.getElementById("close");
+    const modal = document.getElementById("modal");
+    const alert = document.getElementsByClassName("alert")[0];
+   
+    alert.style.color="red";
+    
+    button.addEventListener('click', event => {
+        modal.style.display = 'none';
+    });
+  </script>
 {% endblock %}
+
+ 
