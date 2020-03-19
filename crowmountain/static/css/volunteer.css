@@ -1,3 +1,95 @@
-h1{
-    color: red;
+.btn{
+    border-radius: 25px;
+}
+
+#mainBtns{
+    text-align: center;
+}
+.modal{
+    display: block;
+    z-index: 9999;
+    background-color: rgba(0,0,0,.7) !important;
+}
+.modal-header .close{
+    z-index: 100000;
+}
+input[name="volunteerID"]{
+    border-radius: 25px;
+    width: 80%;
+    margin: auto;
+    text-align: center;
+
+}
+.modal-backdrop {
+    background-color: red;
+ }
+.col-md-4 img{
+    max-width: 300px;
+    max-height: 300px;
+}
+.col-md-4:last-of-type img{
+float: left;
+
+}
+.col-md-4:first-of-type img{
+    float: right;
+    
+    }
+.btnsRow{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.formRow{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+h2{
+    text-align: center;
+}
+#btns{
+    text-align: center;
+}
+@media only screen and (max-width: 799px){
+    .mobile{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+    .col-md-4:nth-child(odd){
+        display: none;
+    }
+    input[name="volunteerID"]{
+        width: 75%;
+        padding: 0;
+        }
+}
+@media only screen and (min-width: 800px){
+    .mobile{
+        display: none;
+    }
+    
+    input[name="volunteerID"]{
+    width: 100%;
+    padding: 0;
+    }
+    .col-md-4 img{
+        width: 230px!important;
+        height: 230px!important;
+    }
+}
+
+@media only screen and (min-width: 990px){
+
+    .mobile{
+        display: none!important;
+    }
+    .col-md-4 img{
+        width: 300px!important;
+        height: 300px!important;
+        
+    }
+    
+
 }

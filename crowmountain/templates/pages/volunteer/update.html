@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{%load static%}
+{%block styles%}
+<link rel="stylesheet" href="{%static 'css/volunteer.css'%}">
+{%endblock%}
+{% block content %}
+<div class="container-fluid">
+        <div class="row formRow"> 
+
+            <div class="col-md-5">
+            <h2>UPDATE FORM</h2>
+
+            <div id="alertMsg"> </div>
+
+            <form name="updateform" autocomplete="off" method="POST" action="./">
+            {% csrf_token %}
+                <input type="hidden" name="came_from" value="updateform">
+                <input type="hidden" name="volunteerid" value="{{volunteer.VolunteerID}}">
+
+                <div class="form-row">
+                    <div class="col">
+                        <label for="address">First Name</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" value="{{volunteer.First_Name}}" name="firstName" id="firstName" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="address">Last Name</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" value="{{volunteer.Last_Name}}" name="lastName" id="lastName" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-12">
+                        <label for="address">Address</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" value="{{volunteer.Address}}"  name="volunteerAddress" id="address" required >
+                        </div>
+                    </div>  
+                </div>
+
+                <div class="form-row">
+                    <div class="col-5">
+                        <label for="address">Phone</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" value="{{volunteer.Phone}}"" name="phoneNumber" id="phoneNumber" required>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <label for="address">E-mail</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" value="{{volunteer.Email}}" name="email" id="email" >
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <label for="address">Age</label>
+                        <div class="form-group">
+                            <input type="number" min="18" max="60" value="{{volunteer.Age}}" class="form-control" name="age" id="age" required>
+                        </div>
+                    </div>
+                </div>
+
+            
+                
+                <div id="btns">  
+                    <input type="submit" class="btn btn-danger" value="Send">
+                    <a href="../" class="btn btn-danger">Cancel</a>
+                </div>  
+            </form>
+            </div>
+        </div> 
+    </div>
+    
+     
+{% endblock %}
