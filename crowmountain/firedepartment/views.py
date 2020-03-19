@@ -64,7 +64,7 @@ def volunteer(request):
             return render(request, 'pages/volunteer/volunteer.html', {'status':status, 'email':email})
             
         except Exception as e:
-            print(e.message)
+            print(e)
 
     elif request.POST.get("came_from")=="volunteerIDForm":
         print("from same s")
