@@ -5,4 +5,35 @@
 {%endblock%}
 {% block content %}
 <h1>Login page content </h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-md-4">
+        
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" class="form-control" id="username" name="username">
+                </div>
+
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" name="password">
+                </div>
+                {%for message in messages%}
+                    <div class="alert alert-danger" role="alert">
+                    {{message}}
+                    </div>
+                 {% endfor %}
+                <div class="btnWrapper">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                
+              </form>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
 {% endblock %}
