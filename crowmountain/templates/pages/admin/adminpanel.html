@@ -4,5 +4,137 @@
 <link rel="stylesheet" href="{%static 'css/admin.css'%}">
 {%endblock%}
 {% block content %}
-<h1>Admin panel page content </h1>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10 tableColumn">
+        <h4>Volunteer Records</h4>
+
+            <div class="searchFormContainer">
+                <form class="form-inline searchform" autocomplete="off" method="POST" action="">
+                  {% csrf_token %}
+                  <label for="search" ></label>
+                  <input class="form-control " id='search' type="search" value="{% if  searchedValue%}{{searchedValue}}{% endif %}" name="search"  placeholder="Search" >
+                  <input type="submit" value="Search" class="btn btn-danger" width="30">
+
+                </form>
+                <form class="form-inline " method="POST" action="">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger" width="30">Reset</button>
+
+                </form>
+
+            </div>
+
+                
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col" id="ageCol">
+                    <form name="agefilter" id="agefilter" method="POST" action="">
+                    {% csrf_token %}
+                      <input type="hidden" name="filterbyageform" value="filterbystatusform">
+                      <input type="hidden" name="asc" id='asc' value="{{isasc}}">
+
+                    <a href="#" id="age" name="filterbyage" onClick=" document.getElementById('agefilter').submit(); ">Age</a> 
+                    <svg class="bi bi-filter" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M6 10.5a.5.5 0 01.5-.5h3a.5.5 0 010 1h-3a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h11a.5.5 0 010 1h-11a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+                    </svg>
+                    </form>
+                    </th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">
+                    
+                    <form name="statusfilter" id="statusfilter" method="POST" action="">
+                    {% csrf_token %}
+                      <input type="hidden" name="filterbystatusbtn" value="filterbystatusbtn">
+                      <input type="hidden" name="asc" id='asc' value="{{isasc}}">
+
+                    <a href="#" id="age" name="filterbystatus" onClick=" document.getElementById('agefilter').submit(); ">Status</a> 
+                    <svg class="bi bi-filter" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M6 10.5a.5.5 0 01.5-.5h3a.5.5 0 010 1h-3a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h7a.5.5 0 010 1h-7a.5.5 0 01-.5-.5zm-2-3a.5.5 0 01.5-.5h11a.5.5 0 010 1h-11a.5.5 0 01-.5-.5z" clip-rule="evenodd"/>
+                    </svg>
+                    </form>
+                    </th>
+                    <th scope="col">Remove</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for volunteer in volunteers%}
+                  <tr>
+                    <td>{{volunteer.Citizen.Last_Name}}</td>
+                    <td>{{volunteer.Citizen.First_Name}}</td>
+                    <td>{{volunteer.Citizen.Address}}</td>
+                    <td>{{volunteer.Citizen.Age}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    <td>{{volunteer.Citizen.Phone}}</td>
+                    <td>{{volunteer.Citizen.Email}}</td>
+                    <td>
+                    <form name="statusform" id="statusform" method="post" action="">
+                    {% csrf_token %}
+                    <input type="text" hidden name="vid" value="{{volunteer.id}}">
+                    <select name="dropdown" class="form-control-sm" onChange="document.getElementById('statusform').submit();">
+                      <option value="{{volunteer.Acceptance_Status}}" disabled selected>{{volunteer.Acceptance_Status}}</option>
+                      <option value="Accepted">Accepted</option>
+
+                      <option value="Rejected">Rejected</option>
+                      <option value="Pending">Pending</option>
+                    </select>
+                    </form>
+                    </td>
+
+                    <td >
+                    <form method="post" action="">{% csrf_token %}
+                    <input type="text" hidden name="vid" value="{{volunteer.Citizen.CitizenID}}">
+                    <input type="submit" name="remove" class="btn-sm btn-danger" value="Remove">
+                    </form>
+                    <!-- <form id="statusform" action="" method="POST">
+                        <select name="status" id="status" class="form-control-sm">
+                            <option value="Accepted">Pending</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Accepted">Rejected</option>
+                        </select>
+                        <button type="submit" class="btn-sm btn-danger">Update</button>
+                    </form> -->
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              
+                <form class="form-inline mobilesearchform" autocomplete="off" method="POST" action="">
+                  {% csrf_token %}
+                <div class="col-10">
+                  <input class="form-control " type="search" name="search" placeholder="Search.." >
+                </div>
+                <div class="col-2">
+                <input type="image" src="{% static 'images/search.png'%}" width="30">
+                </div>
+                </form>
+              {% for volunteer in volunteers  %}
+              <table class="table">
+                  <thead>
+                      <tr>
+                   <th colspan="5">{{volunteer.Citizen.First_Name}} {{volunteer.Citizen.Last_Name}}</th>
+                </tr> 
+                  </thead>
+                  <tbody>
+                    <tr><td><a href="tel:{{volunteer.Citizen.Phone}}">{{volunteer.Citizen.Phone}}</a></td></tr>
+                    <tr><td>{{volunteer.Citizen.Address}}</td></tr>
+                    <tr><td>{{volunteer.Citizen.Age}}</td></tr>
+                    <tr><td>{{volunteer.Citizen.Email}}</td></tr>
+                  </tbody>
+              </table>
+              {% endfor %}
+
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+</div>
+
+
 {% endblock %}

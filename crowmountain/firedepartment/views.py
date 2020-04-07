@@ -1,14 +1,18 @@
 from django.shortcuts import render
 from .models import Citizen
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+import uuid
 from .models import Volunteer
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 #Sendgrid imports
 import os
-#from sendgrid import SendGridAPIClient
-#from sendgrid.helpers.mail import Mail
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 #####################################
 
 # Create your views here.
@@ -20,10 +24,10 @@ def aboutus(request):
 
 def contactus(request):
     return render(request, 'pages/contactus.html')
+def volunteer(request, status, email ):
+    print("hoal")
 
 def volunteer(request):
-    print(request.POST.get('errormsg'))
-
     if request.POST.get("came_from")=="updateform":
         firstname = request.POST.get("firstName")
         lastname = request.POST.get("lastName")
@@ -32,9 +36,9 @@ def volunteer(request):
         phone = request.POST.get("phoneNumber")
         email = request.POST.get("email")
         volunteerid =request.POST.get("volunteerid")
-        Citizen.objects.filter(VolunteerID=volunteerid).update(First_Name=firstname, Last_Name=lastname, Phone=phone, Address=address,Age=age, Email=email)
+        Citizen.objects.filter(CitizenID=volunteerid).update(First_Name=firstname, Last_Name=lastname, Phone=phone, Address=address,Age=age, Email=email)
 
-        return render(request, 'pages/volunteer.html')
+        return render(request, 'pages/volunteer/volunteer.html')
 
     elif request.POST.get("came_from")=="volunteerform":
         firstname = request.POST.get("firstName")
@@ -48,33 +52,37 @@ def volunteer(request):
         
         fulladdress = address + " " + city + ", AR " + zipcode
         citizendata = Citizen(First_Name=firstname, Last_Name=lastname, Phone=phone, Address=fulladdress,Age=age, Email=email)
-
+        print("hreeeeeeee")
+        status="202"
         citizendata.save()
         citizen = citizendata
 
         volunterdata = Volunteer(Citizen=citizen, Acceptance_Status="Accepted")
         volunterdata.save()
        
-        # message = Mail(
-        # from_email=email,
-        # to_emails='hescalante@atu.edu',
-        # subject='New Volunteer',
-        # html_content='<strong>Hola</strong>')
-        # try:
-        #     sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-        #     response = sg.send(message)
-        #     status = response.status_code
-        #     return render(request, 'pages/volunteer/volunteer.html', {'status':status, 'email':email})
-            
-        # except Exception as e:
-        #     print(e)
+        message = Mail(
+        from_email=email,
+        to_emails='hescalante@atu.edu',
+        subject='New Volunteer',
+        html_content='<strong>Hola</strong>')
+        try:
+            sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+            response = sg.send(message)
+            status = response.status_code
+            return render(request, 'pages/volunteer/volunteer.html', {'status':status, 'email':email})
+        # url = reverse('volunteer', kwargs={'status': status,'email':email})
+        # return HttpResponseRedirect(url)
+        except Exception as e:
+            print(e)
+        
+        # return HttpResponseRedirect(request, 'pages/volunteer/volunteer.html', {'status':status, 'email':email})
 
     elif request.POST.get("came_from")=="volunteerIDForm":
         print("from same s")
         citizens = Citizen.objects.all()
         vid=request.POST.get("volunteerID")
         try:
-            volunteer = citizens.get(VolunteerID=vid)
+            volunteer = citizens.get(CitizenID=vid)
         except Exception as e:
             return render(request, 'pages/volunteer/volunteer.html', {"errormsg":"Invalid ID"})
     
@@ -105,12 +113,9 @@ def loginPage(request):
         if(request.method=='POST'):
             username = request.POST.get("username")
             password = request.POST.get("password")
-
             admin = authenticate(request, username=username,password=password)
-
             if admin is not None:
                 login(request, admin)
-                print("hereee")
                 return redirect('administrator')
             else:
                 messages.info(request, "Wrong email/password")
@@ -123,5 +128,39 @@ def adminLogout(request):
     return redirect("login")
 
 @login_required(login_url='login')
+
 def administrator(request):
-    return render(request, 'pages/admin/adminpanel.html')
+    asc = request.POST.get('asc')
+    citizens = Citizen.objects.all()
+    searchedValue="Search"
+    searchedValue = request.POST.get("search")
+    #Gets all Citizens objects that exist in the Volunter model 
+    volunteers = Volunteer.objects.filter(Citizen__in=citizens)
+
+    vid=request.POST.get('vid')
+    if request.POST.get("remove"):
+        Citizen.objects.filter(CitizenID=vid).delete()
+    if request.POST.get("search"):
+        citizens = Citizen.objects.filter(Q(First_Name__contains=request.POST.get("search")) | Q(Last_Name__contains=request.POST.get("search"))| Q(Email__contains=request.POST.get("search"))| Q(Phone__contains=request.POST.get("search"))  )
+        volunteers = Volunteer.objects.filter(Citizen__in=citizens)
+        return render(request, 'pages/admin/adminpanel.html', {'volunteers':volunteers,'searchedValue':searchedValue})
+    if request.POST.get("dropdown"):
+        Volunteer.objects.filter(id=vid).update(Acceptance_Status=request.POST.get("dropdown"))
+    if request.POST.get("filterbyageform"):
+        if  asc =='None' or asc=='False':
+            volunteers = Volunteer.objects.all().order_by('Citizen__Age')
+            asc =True
+        elif asc =='True':
+            volunteers = Volunteer.objects.all().order_by('-Citizen__Age')
+            asc =False
+    if request.POST.get("filterbystatusinput"):
+        if  asc =='None' or asc=='False':
+            volunteers = Volunteer.objects.all().order_by('Acceptance_Status')
+            asc =True
+        elif asc =='True':
+            volunteers = Volunteer.objects.all().order_by('-Acceptance_Status')
+            asc =False
+    
+    
+
+    return render(request, 'pages/admin/adminpanel.html', {'volunteers':volunteers, 'isasc':asc, 'searchedValue':searchedValue})
