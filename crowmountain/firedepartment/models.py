@@ -4,7 +4,7 @@ import uuid
 # Create your models here.
 
 class Citizen(models.Model):
-    VolunteerID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    CitizenID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     First_Name = models.CharField(max_length=50, null=True)
     Last_Name =  models.CharField(max_length=50, null=True)
     Phone = models.CharField(max_length=10,null=True)

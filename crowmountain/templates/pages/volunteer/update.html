@@ -15,7 +15,7 @@
             <form name="updateform" autocomplete="off" method="POST" action="./">
             {% csrf_token %}
                 <input type="hidden" name="came_from" value="updateform">
-                <input type="hidden" name="volunteerid" value="{{volunteer.VolunteerID}}">
+                <input type="hidden" name="volunteerid" value="{{volunteer.CitizenID}}">
 
                 <div class="form-row">
                     <div class="col">

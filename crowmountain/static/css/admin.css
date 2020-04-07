@@ -4,6 +4,97 @@
 .btn{
     background-color: #A80B1B;
 }
-input[type="text"]{
+#statusform{
+    display: flex;
+    flex-direction: row;
+}
+.btn-sm{
+    margin-left: 10px;
+}
+tbody tr:nth-of-type(odd){
+    background-color: lightgray;
+}
+.searchform .col-10{
+    padding-left: 0!important;
+
+}
+form.form-inline.searchform input[type='submit']{
+    margin-right: 10px!important;
+    margin-left: 10px;
+
+}
+.searchFormContainer{
+    display:flex; 
+    justify-content:center;
+    margin-bottom: 5vh;
+    margin-top: 5vh;
+
+}
+#ageCol{
+    padding-left: 0;
+}
+table a{
+    color: black;
+}
+table a:hover{
+    color: black;
+    text-decoration: none;
+}
+h4{
+    text-align: center;
+}
+@media only screen and (max-width: 1001px){
+table:first-of-type{
+    display: none;
+}
+
+table th{
+    background-color: grey;
+
+    color: white;
+}
+table{
+    border-color: gray;
+
+    background-color: lightgray;
     
+}
+.tableColumn{
+    padding: 0;
+}
+
+.mobilesearchform input[type="search"]{
+    height: 45px;
+flex: 1;
+border-radius: 0;
+
+
+}
+.mobilesearchform{
+    background-color: gray;
+
+
+}
+
+.mobilesearchform div:first-of-type{
+    padding-left: 0;
+    padding-right: 0;
+    display: flex;
+    align-items: flex-start;
+
+}
+.searchform{
+    display: none;
+}
+
+}
+
+
+@media only screen and (min-width: 1001px){
+table:not(:first-of-type){
+    display: none
+}
+.mobilesearchform{
+    display: none;
+}
 }
