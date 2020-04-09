@@ -6,26 +6,33 @@
 
 {% block content %}
  
-        {% if status == 202 %}
-      <div class="modal " id="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Thank you</h5>
-        <button type="button" id="close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Your form has been sucessfully submitted and a confirmation email was sent to <b>{{email}}<b> </p>
-        <p></p>
-      </div>
-      
-    </div>
-  </div>
-</div>
-        {% endif %}
+        {% if messages %}
+          {% for message in  messages%}
 
+      <div class="modal " id="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title">Thank you</h5>
+            <button type="button" id="close" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            {% if 'success' in message.tags%}
+              <p class="{{message.tags}}">Your form has been sucessfully submitted and a confirmation email was sent to <span>{{message}}<span> </p>
+            {% endif %}
+            {% if 'error' in message.tags%}
+              <p class="{{message.tags}}">Unfortunatelly there was an error and you form was not submiteed </p>
+            {% endif %}
+          </div>  
+          </div>
+        </div>
+      </div>
+
+        {% endfor %}
+      {% endif %}
+      
 <div class="container">
     <div class="row ">
         <div class="col mobile">

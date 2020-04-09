@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.contrib import messages
+
 #Sendgrid imports
 import os
 from sendgrid import SendGridAPIClient
@@ -52,13 +54,11 @@ def volunteer(request):
         
         fulladdress = address + " " + city + ", AR " + zipcode
         citizendata = Citizen(First_Name=firstname, Last_Name=lastname, Phone=phone, Address=fulladdress,Age=age, Email=email)
-        print("hreeeeeeee")
-        status="202"
-        citizendata.save()
-        citizen = citizendata
+        # citizendata.save()
+        # citizen = citizendata
 
-        volunterdata = Volunteer(Citizen=citizen, Acceptance_Status="Accepted")
-        volunterdata.save()
+        # volunterdata = Volunteer(Citizen=citizen, Acceptance_Status="Accepted")
+        # volunterdata.save()
        
         message = Mail(
         from_email=email,
@@ -67,16 +67,18 @@ def volunteer(request):
         html_content='<strong>Hola</strong>')
         try:
             sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-            response = sg.send(message)
-            status = response.status_code
-            return render(request, 'pages/volunteer/volunteer.html', {'status':status, 'email':email})
-        # url = reverse('volunteer', kwargs={'status': status,'email':email})
-        # return HttpResponseRedirect(url)
+            # response = sg.send(message)
+            # status = response.status_code
+            status=202
+            if status==202:
+                messages.success(request, email)
+            else:
+                messages.error(request, 'Failed')
         except Exception as e:
-            print(e)
-        
-        # return HttpResponseRedirect(request, 'pages/volunteer/volunteer.html', {'status':status, 'email':email})
-
+            print(e)        
+        url = reverse('volunteer')
+        return HttpResponseRedirect(url) 
+           
     elif request.POST.get("came_from")=="volunteerIDForm":
         print("from same s")
         citizens = Citizen.objects.all()
