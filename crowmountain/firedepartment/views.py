@@ -72,10 +72,11 @@ def volunteer(request):
         subject='New Volunteer',
         html_content='<strong>Hola</strong>')
         try:
-            sg = SendGridAPIClient(os.environ.get('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'))
+            sg = SendGridAPIClient(os.environ.get('Sendgrid_API_Key'))
             response = sg.send(message)
             status = response.status_code
             status=202
+            print(os.environ.get('SENDGRID_API_KEY'))
             if status==202:
                 messages.success(request, email, extra_tags='email')
                 messages.success(request, firstname, extra_tags='firstname')
